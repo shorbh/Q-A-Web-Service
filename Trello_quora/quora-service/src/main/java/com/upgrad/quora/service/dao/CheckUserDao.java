@@ -35,4 +35,12 @@ public class CheckUserDao {
         entityManager.persist(userAuthTokenEntity);
         return userAuthTokenEntity;
     }
+    public UserAuthTokenEntity checkLogin(final String accessToken){
+        try{
+            return entityManager.createNamedQuery("userByAccessToken",UserAuthTokenEntity.class).setParameter("accessToken",accessToken).getSingleResult();
+        }
+        catch (Exception e){
+            return null;
+        }
+    }
 }

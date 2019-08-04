@@ -1,9 +1,11 @@
 package com.upgrad.quora.api.controller;
 
 import com.upgrad.quora.api.model.SigninResponse;
+import com.upgrad.quora.api.model.SignoutResponse;
 import com.upgrad.quora.service.business.AuthenticationService;
 import com.upgrad.quora.service.entity.UserAuthTokenEntity;
 import com.upgrad.quora.service.exception.AuthenticationFailedException;
+import com.upgrad.quora.service.exception.SignOutRestrictedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,7 +23,7 @@ import java.util.Base64;
 public class Authentication {
     @Autowired
     AuthenticationService authenticationService;
-    @RequestMapping(method = RequestMethod.POST,path="/auth/login",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(method = RequestMethod.POST,path="/user/signin",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SigninResponse> login(@RequestHeader("authorization") final String authorization) throws AuthenticationFailedException {
         byte[] decode = Base64.getDecoder().decode(authorization.split("Basic ")[1]);
         String decodedText = new String(decode);
@@ -31,5 +33,12 @@ public class Authentication {
         HttpHeaders headers = new HttpHeaders();
         headers.add("access-token",userAuthToken.getAccess_Token());
         return  new ResponseEntity<SigninResponse>(authorizedUserResponse,headers, HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.POST,path="/user/signout",produces = MediaType.APPLICATION_JSON_UTF8_VALUE,consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<SignoutResponse> logout(@RequestHeader("authorization") final String authorization) throws SignOutRestrictedException {
+        UserAuthTokenEntity userAuthTokenEntity = authenticationService.signout(authorization);
+        SignoutResponse signoutResponse = new SignoutResponse().id(userAuthTokenEntity.getUuid()).message("SIGNED OUT SUCCESSFULLY");
+        return new ResponseEntity<SignoutResponse>(signoutResponse,HttpStatus.OK);
     }
 }
