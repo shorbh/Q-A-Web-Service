@@ -12,7 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class SignupBusinessService {
     @Autowired
     private CheckUserDao checkUser;
-
+    @Autowired
+    PasswordCryptographyProvider passwordCryptographyProvider;
     public boolean checkUserName(String username) throws SignUpRestrictedException{
         if( (checkUser.checkUserName(username) != null)){
             throw new SignUpRestrictedException("SGR-001","Try any other Username, this Username has already been taken");
@@ -31,6 +32,9 @@ public class SignupBusinessService {
     }
     @Transactional(propagation = Propagation.REQUIRED)
     public UserEntity signup(UserEntity userEntity){
+        String[] encrypt = passwordCryptographyProvider.encrypt(userEntity.getPassword());
+        userEntity.setSalt(encrypt[0]);
+        userEntity.setPassword(encrypt[1]);
         return checkUser.signup(userEntity);
     }
 }
