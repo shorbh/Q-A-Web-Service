@@ -50,6 +50,7 @@ public class AuthenticationService {
         if(authTokenEntity == null){
             throw new SignOutRestrictedException("SGR-001","User is not Signed in");
         }
+        authTokenEntity.setAccess_Token("");
         authTokenEntity.setLogout_At(ZonedDateTime.now());
         authTokenEntity = userDao.createAuthToken(authTokenEntity);
         return authTokenEntity;

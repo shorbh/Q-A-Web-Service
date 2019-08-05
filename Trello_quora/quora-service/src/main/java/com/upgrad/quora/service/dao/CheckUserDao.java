@@ -43,4 +43,12 @@ public class CheckUserDao {
             return null;
         }
     }
+    public UserEntity getUserByUuid(String uuid){
+        try {
+            return entityManager.createNamedQuery("userByUuid", UserEntity.class).setParameter("uuid", uuid).getSingleResult();
+        }
+        catch (Exception e){
+            return  null;
+        }
+    }
 }
