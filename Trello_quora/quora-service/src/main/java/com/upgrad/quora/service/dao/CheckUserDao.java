@@ -51,4 +51,8 @@ public class CheckUserDao {
             return  null;
         }
     }
+
+    public void deleteUser(UserEntity userEntity){
+        entityManager.remove(userEntity);
+    }
 }

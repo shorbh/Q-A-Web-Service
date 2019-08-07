@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 public class CommonController {
     @Autowired
     private UserDetailsService userDetailsService;
-    @RequestMapping(method = RequestMethod.GET,path = "/userprofile/{uuid}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<UserDetailsResponse> getUser(@PathVariable("uuid") final String userUuid, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, UserNotFoundException {
+    @RequestMapping(method = RequestMethod.GET,path = "/userprofile/{userId}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<UserDetailsResponse> getUser(@PathVariable("userId") final String userUuid, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, UserNotFoundException {
         final UserEntity userEntity = userDetailsService.getUser(userUuid,authorization);
         UserDetailsResponse userDetailsResponse = new UserDetailsResponse().firstName(userEntity.getFirstName()).lastName(userEntity.getLastName()).userName(userEntity.getUsername()).emailAddress(userEntity.getEmail()).contactNumber(userEntity.getContactnumber()).country(userEntity.getCountry()).aboutMe(userEntity.getAboutme()).dob(userEntity.getDob());
         return new ResponseEntity<UserDetailsResponse>(userDetailsResponse, HttpStatus.OK);

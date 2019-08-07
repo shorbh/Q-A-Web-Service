@@ -34,7 +34,7 @@ public class AuthenticationService {
             userAuthTokenEntity.setAccess_Token(jwtTokenProvider.generateToken(userEntity.getUuid(), now,expiredAt));
             userAuthTokenEntity.setLogin_At(now);
             userAuthTokenEntity.setExpires_At(expiredAt);
-            userAuthTokenEntity.setUser_id(3);
+            userAuthTokenEntity.setUser_id(userEntity.getId());
             userDao.createAuthToken(userAuthTokenEntity);
 
             //userDao.updateUser(userEntity);

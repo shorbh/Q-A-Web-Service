@@ -4,6 +4,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -16,7 +18,8 @@ import java.io.Serializable;
         {
                 @NamedQuery(name = "userByUuid", query = "select u from UserEntity u where u.uuid = :uuid"),
                 @NamedQuery(name = "userByEmail", query = "select u from UserEntity u where u.email =:email"),
-                @NamedQuery(name = "userByName", query = "select u from UserEntity u where u.username =:username")
+                @NamedQuery(name = "userByName", query = "select u from UserEntity u where u.username =:username"),
+                @NamedQuery(name = "deleteUserByUuid", query = "delete from UserEntity u where u.uuid = :uuid")
         }
 )
 
@@ -25,6 +28,7 @@ public class UserEntity implements Serializable{
 
     @Id
     @Column(name = "ID")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
