@@ -1,9 +1,6 @@
 package com.upgrad.quora.service.entity;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -46,6 +43,7 @@ public class UserEntity implements Serializable{
 
    // @ToStringExclude
     @Column(name = "PASSWORD")
+    @ToStringExclude
     private String password;
 
     @Column(name = "FIRSTNAME")
@@ -91,7 +89,7 @@ public class UserEntity implements Serializable{
     @Column(name = "SALT")
     @NotNull
     @Size(max = 200)
-    //@ToStringExclude
+    @ToStringExclude
     private String salt;
 
 //    @Version

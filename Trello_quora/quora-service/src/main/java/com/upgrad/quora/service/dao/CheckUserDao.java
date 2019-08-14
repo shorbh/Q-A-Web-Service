@@ -55,4 +55,12 @@ public class CheckUserDao {
     public void deleteUser(UserEntity userEntity){
         entityManager.remove(userEntity);
     }
+    public UserAuthTokenEntity getUser(final int id){
+        try{
+            return entityManager.createNamedQuery("userById",UserAuthTokenEntity.class).setParameter("id",id).getSingleResult();
+        }
+        catch (Exception e){
+            return null;
+        }
+    }
 }

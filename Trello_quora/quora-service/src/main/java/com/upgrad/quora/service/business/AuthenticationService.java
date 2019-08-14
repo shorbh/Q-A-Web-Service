@@ -27,10 +27,17 @@ public class AuthenticationService {
         String encrypt = passwordCryptographyProvider.encrypt(password, userEntity.getSalt());
         if(encrypt.equals(userEntity.getPassword())){
             JwtTokenProvider jwtTokenProvider = new JwtTokenProvider(encrypt);
-            UserAuthTokenEntity userAuthTokenEntity = new UserAuthTokenEntity();
-            userAuthTokenEntity.setUuid(userEntity.getUuid());
             final ZonedDateTime now = ZonedDateTime.now();
             final ZonedDateTime expiredAt = now.plusHours(8);
+            UserAuthTokenEntity entity = userDao.getUser(userEntity.getId());
+            if(entity!=null){
+                entity.setAccess_Token(jwtTokenProvider.generateToken(userEntity.getUuid(), now,expiredAt));
+                entity.setLogin_At(now);
+                entity.setExpires_At(expiredAt);
+                return userDao.createAuthToken(entity);
+            }
+            UserAuthTokenEntity userAuthTokenEntity = new UserAuthTokenEntity();
+            userAuthTokenEntity.setUuid(userEntity.getUuid());
             userAuthTokenEntity.setAccess_Token(jwtTokenProvider.generateToken(userEntity.getUuid(), now,expiredAt));
             userAuthTokenEntity.setLogin_At(now);
             userAuthTokenEntity.setExpires_At(expiredAt);
